@@ -6,27 +6,35 @@ package log4shell;
 import com.unboundid.ldap.sdk.LDAPException;
 import picocli.CommandLine;
 
-public class ShellServer implements Runnable {
-  private Config config;
+import java.io.Closeable;
+
+public class ShellServer implements Closeable {
+  private HttpServer httpServer;
+  private LdapServer ldapServer;
 
   public ShellServer(Config config) {
-    this.config = config;
-  }
-
-  @Override
-  public void run() {
     try {
-      LdapServer ldapServer = new LdapServer(config);
+      httpServer = new HttpServer(config);
+      ldapServer = new LdapServer(config);
+
       System.out.println("Ready Player One");
+
     } catch (LDAPException e) {
       System.err.println("Failed to start");
       e.printStackTrace();
     }
   }
 
+  @Override
+  public void close() {
+    ldapServer.close();
+    httpServer.close();
+  }
+
   public static void main(String[] args) {
     Config config = new Config();
     new CommandLine(config).parseArgs(args);
-    new ShellServer(config).run();
+    ShellServer server = new ShellServer(config);
+    Runtime.getRuntime().addShutdownHook(new Thread(server::close));
   }
 }

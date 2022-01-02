@@ -12,8 +12,10 @@ import com.unboundid.ldap.sdk.ResultCode;
 import javax.net.ServerSocketFactory;
 import javax.net.SocketFactory;
 import javax.net.ssl.SSLSocketFactory;
+import java.io.Closeable;
+import java.io.IOException;
 
-public class LdapServer {
+public class LdapServer implements Closeable {
 
   private static final String LDAP_BASE = "dc=example,dc=com";
 
@@ -32,10 +34,16 @@ public class LdapServer {
 
     ldapConfig.addInMemoryOperationInterceptor(new OperationInterceptor(config));
 
-    System.out.printf(
-        "Listening for LDAP on %s:%d%n", config.getListenAddress(), config.getLdapPort());
     ds = new InMemoryDirectoryServer(ldapConfig);
     ds.startListening();
+
+    System.out.printf(
+        "Listening for LDAP on %s:%d%n", config.getListenAddress(), config.getLdapPort());
+  }
+
+  @Override
+  public void close()  {
+    ds.close();
   }
 
   private static final class OperationInterceptor extends InMemoryOperationInterceptor {
