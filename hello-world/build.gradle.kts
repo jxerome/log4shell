@@ -26,7 +26,7 @@ java {
 }
 
 application {
-    mainClass.set("log4shell.FailingApp")
+    mainClass.set("log4shell.HelloWorld")
 }
 
 tasks.named<Test>("test") {

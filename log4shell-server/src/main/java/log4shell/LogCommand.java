@@ -2,8 +2,11 @@ package log4shell;
 
 import com.unboundid.ldap.sdk.DN;
 import com.unboundid.ldap.sdk.Entry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public final class LogCommand extends Command {
+  private static final Logger found = LoggerFactory.getLogger("log4shell.found");
 
   private final String message;
 
@@ -14,7 +17,7 @@ public final class LogCommand extends Command {
 
   @Override
   Entry response() {
-    System.out.printf("Message: %s%n", message);
+    found.info(message);
 
     Entry e = new Entry(getDn());
     e.addAttribute("objectClass", "top");

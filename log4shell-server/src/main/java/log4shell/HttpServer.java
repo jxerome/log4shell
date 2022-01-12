@@ -11,6 +11,8 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.http.*;
 import io.netty.util.AsciiString;
 import io.netty.util.CharsetUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -22,6 +24,8 @@ import java.net.URISyntaxException;
 public class HttpServer implements Closeable {
   private static final String CLASS_MIMETYPE = "application/java-vm";
   private static final String PLAIN_TEXT_MIMETYPE = "text/plain; charset=UTF-8";
+
+  private static final Logger log = LoggerFactory.getLogger(HttpServer.class);
 
   private final Channel channel;
 
@@ -56,8 +60,11 @@ public class HttpServer implements Closeable {
               bossGroup.shutdownGracefully();
             });
 
-    System.out.printf(
-        "Listening for HTTP on %s:%d%n", config.getListenAddress(), config.getHttpPort());
+    String message =
+        String.format(
+            "Listening for HTTP on %s:%d", config.getListenAddress(), config.getHttpPort());
+    System.out.println(message);
+    log.info(message);
   }
 
   @Override
@@ -84,7 +91,7 @@ public class HttpServer implements Closeable {
       FullHttpResponse response;
       try {
         URI uri = new URI(request.uri());
-        System.out.printf("HTTP Request %s %s%n", request.method(), uri.toASCIIString());
+        log.info("HTTP Request {} {}", request.method(), uri.toASCIIString());
 
         String path = uri.getPath();
         if (path == null || path.isEmpty() || "/".equals(path)) {
@@ -98,10 +105,10 @@ public class HttpServer implements Closeable {
                 byte[] bytes = IO.readAll(in);
                 ByteBuf content = Unpooled.copiedBuffer(bytes);
                 response = classfile(content);
-                System.out.printf("HTTP send %s - %d bytes%n", uri.toASCIIString(), bytes.length);
+                log.info("HTTP send {} - {} bytes", uri.toASCIIString(), bytes.length);
               } else {
                 response = text(HttpResponseStatus.NOT_FOUND, "Not Found " + path);
-                System.out.printf("HTTP Not Found %s%n", uri.toASCIIString());
+                log.info("HTTP Not Found {}", uri.toASCIIString());
               }
             } catch (IOException e) {
               response = text(HttpResponseStatus.INTERNAL_SERVER_ERROR, "Error " + e.getMessage());
@@ -142,11 +149,11 @@ public class HttpServer implements Closeable {
 
               } else {
                 response = text(HttpResponseStatus.NOT_FOUND, "Not Found " + path);
-                System.out.printf("HTTP Not Found %s%n", uri.toASCIIString());
+                log.warn("HTTP Not Found {}", uri.toASCIIString());
               }
             } catch (ClassCastException | ClassNotFoundException e) {
               response = text(HttpResponseStatus.NOT_FOUND, "Not Found " + path);
-              System.out.printf("HTTP Not Found %s%n", uri.toASCIIString());
+              log.error("HTTP Not Found {}", uri.toASCIIString(), e);
             } catch (Exception e) {
               response = empty(HttpResponseStatus.NO_CONTENT);
             }

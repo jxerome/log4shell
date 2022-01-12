@@ -1,6 +1,11 @@
 package log4shell.aws;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class LogCreds implements Runnable {
+  private static final Logger found = LoggerFactory.getLogger("log4shell.found");
+
   private final Creds creds;
 
   public LogCreds(Creds creds) {
@@ -9,6 +14,6 @@ public class LogCreds implements Runnable {
 
   @Override
   public void run() {
-    System.out.println("AWS Credentials\n" + creds);
+    found.info("{}", creds);
   }
 }

@@ -110,6 +110,7 @@ public class Creds {
       joiner.add("AWS_WEB_IDENTITY_TOKEN_FILE=" + webIdentityTokenFile);
 
     StringBuilder sb = new StringBuilder();
+    sb.append("======== AWS Credentials ========\n");
     sb.append("---- Environment ----\n").append(joiner);
     sb.append('\n');
     if (configFile != null) {

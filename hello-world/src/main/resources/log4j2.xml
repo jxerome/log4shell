@@ -2,7 +2,7 @@
 <Configuration>
     <Appenders>
         <Console name="console">
-            <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5p %C{25} %m%n"/>
+            <PatternLayout pattern="> %m%n"/>
         </Console>
     </Appenders>
     <Loggers>

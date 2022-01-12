@@ -8,5 +8,5 @@
  */
 
 rootProject.name = "log4shell"
-include("app")
-include("failing-app")
+include("log4shell-server")
+include("hello-world")

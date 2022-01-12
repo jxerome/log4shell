@@ -1,0 +1,29 @@
+<configuration>
+
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>&gt; %msg%n</pattern>
+        </encoder>
+    </appender>
+    <appender name="found" class="ch.qos.logback.core.FileAppender">
+        <file>log4shell_found.log</file>
+        <encoder>
+            <pattern>%msg%n</pattern>
+        </encoder>
+    </appender>
+    <appender name="server" class="ch.qos.logback.core.FileAppender">
+        <file>log4shell_server.log</file>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="log4shell.found" level="info" additivity="false">
+        <appender-ref ref="console"/>
+        <appender-ref ref="found"/>
+    </logger>
+    <logger name="log4shell" level="info"/>
+    <root level="warn">
+        <appender-ref ref="server"/>
+    </root>
+</configuration>

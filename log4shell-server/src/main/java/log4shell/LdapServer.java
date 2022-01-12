@@ -8,6 +8,8 @@ import com.unboundid.ldap.listener.interceptor.InMemoryOperationInterceptor;
 import com.unboundid.ldap.sdk.LDAPException;
 import com.unboundid.ldap.sdk.LDAPResult;
 import com.unboundid.ldap.sdk.ResultCode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.net.ServerSocketFactory;
 import javax.net.SocketFactory;
@@ -15,6 +17,7 @@ import javax.net.ssl.SSLSocketFactory;
 import java.io.Closeable;
 
 public class LdapServer implements Closeable {
+  private static final Logger log = LoggerFactory.getLogger(LdapServer.class);
 
   private static final String LDAP_BASE = "dc=example,dc=com";
 
@@ -36,12 +39,15 @@ public class LdapServer implements Closeable {
     ds = new InMemoryDirectoryServer(ldapConfig);
     ds.startListening();
 
-    System.out.printf(
-        "Listening for LDAP on %s:%d%n", config.getListenAddress(), config.getLdapPort());
+    String message =
+        String.format(
+            "Listening for LDAP on %s:%d", config.getListenAddress(), config.getLdapPort());
+    System.out.println(message);
+    log.info(message);
   }
 
   @Override
-  public void close()  {
+  public void close() {
     ds.close();
   }
 
@@ -67,8 +73,7 @@ public class LdapServer implements Closeable {
         result.setResult(new LDAPResult(0, ResultCode.SUCCESS));
 
       } catch (LDAPException e) {
-        System.err.printf("Can't process request on %s%n", rawDn);
-        e.printStackTrace();
+        log.error("Can't process request on {}", rawDn, e);
       }
     }
   }

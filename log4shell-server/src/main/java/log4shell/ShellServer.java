@@ -3,12 +3,15 @@
  */
 package log4shell;
 
-import com.unboundid.ldap.sdk.LDAPException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import picocli.CommandLine;
 
 import java.io.Closeable;
 
 public class ShellServer implements Closeable {
+  private static final Logger log = LoggerFactory.getLogger(ShellServer.class);
+
   private HttpServer httpServer;
   private LdapServer ldapServer;
 
@@ -17,11 +20,12 @@ public class ShellServer implements Closeable {
       httpServer = new HttpServer(config);
       ldapServer = new LdapServer(config);
 
+      log.info("Ready Player One");
       System.out.println("Ready Player One");
 
-    } catch (LDAPException e) {
+    } catch (Exception e) {
       System.err.println("Failed to start");
-      e.printStackTrace();
+      log.error("Failed to start", e);
     }
   }
 
