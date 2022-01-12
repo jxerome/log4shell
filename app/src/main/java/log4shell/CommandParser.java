@@ -6,10 +6,10 @@ import com.unboundid.ldap.sdk.LDAPException;
 import com.unboundid.ldap.sdk.RDN;
 
 public final class CommandParser {
-  private final String codebase;
+  private final Config config;
 
-  public CommandParser(String codebase) {
-    this.codebase = codebase;
+  public CommandParser(Config config) {
+    this.config = config;
   }
 
   public Command parse(String command) {
@@ -21,7 +21,7 @@ public final class CommandParser {
       switch (firstAttribute.getName()) {
         case "run":
           String className = firstAttribute.getValue();
-          return new RunCommand(dn, codebase, className);
+          return new RunCommand(dn, config, className);
         case "log":
           String message = firstAttribute.getValue();
           return new LogCommand(dn, message);

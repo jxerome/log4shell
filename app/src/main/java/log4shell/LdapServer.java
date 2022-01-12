@@ -13,7 +13,6 @@ import javax.net.ServerSocketFactory;
 import javax.net.SocketFactory;
 import javax.net.ssl.SSLSocketFactory;
 import java.io.Closeable;
-import java.io.IOException;
 
 public class LdapServer implements Closeable {
 
@@ -50,10 +49,7 @@ public class LdapServer implements Closeable {
     private final CommandParser commandParser;
 
     public OperationInterceptor(Config config) {
-      String codebase =
-          String.format(
-              "http://%s:%d/", config.getListenAddress().getHostAddress(), config.getHttpPort());
-      this.commandParser = new CommandParser(codebase);
+      this.commandParser = new CommandParser(config);
     }
 
     /**
