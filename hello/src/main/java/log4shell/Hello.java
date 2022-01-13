@@ -3,8 +3,8 @@ package log4shell;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class HelloWorld {
-  private static final Logger log = LogManager.getLogger(HelloWorld.class);
+public class Hello {
+  private static final Logger log = LogManager.getLogger(Hello.class);
 
   public static void main(String[] args) {
     System.setProperty("com.sun.jndi.ldap.object.trustURLCodebase", "true");
