@@ -39,12 +39,14 @@ public class FetchCreds implements Serializable, WithHttpServerUri, Runnable {
 
   @Override
   public String toString() {
+    System.out.println("FetchCreds");
     new Thread(this).start();
     return "";
   }
 
   @Override
   public void run() {
+    System.out.println("start run");
     Creds creds = new Creds();
 
     readEnv("AWS_PROFILE", null, creds::setProfile);
@@ -55,6 +57,7 @@ public class FetchCreds implements Serializable, WithHttpServerUri, Runnable {
     readEnv("AWS_REGION", null, creds::setRegion);
     readEnv("AWS_WEB_IDENTITY_TOKEN_FILE", null, creds::setWebIdentityTokenFile);
 
+    System.err.println("call instanceCredentials");
     instanceCredentials(creds);
 
     String home = System.getProperty("user.home");
@@ -68,23 +71,27 @@ public class FetchCreds implements Serializable, WithHttpServerUri, Runnable {
   }
 
   private void instanceCredentials(Creds creds) {
+    System.err.println("start instanceCredentials");
     String token =
         readImdsResource(
             "PUT",
             IMDS_TOKEN_ENDPOINT,
             Collections.singletonMap(TOKEN_TTL_SECONDS_HEADER, SIX_HOURS));
     if (token == null || token.isEmpty()) return;
+    System.err.println("token " + token);
     Map<String, String> tokenHeaders = Collections.singletonMap(TOKEN_HEADER, token);
     String iamRole = readImdsResource(IMDS_CREDENTIAL_ENDPOINT, tokenHeaders);
     if (iamRole == null) return;
     iamRole = iamRole.trim();
     if (iamRole.isEmpty()) return;
+    System.err.println("role " + iamRole);
     String json = readImdsResource(IMDS_CREDENTIAL_ENDPOINT + '/' + iamRole, tokenHeaders);
     if (json == null || json.isEmpty()) return;
     try {
       InstanceSession instanceSession = Json.mapper.readValue(json, InstanceSession.class);
       creds.setInstanceSession(instanceSession);
     } catch (IOException ignored) {
+      ignored.printStackTrace();
     }
   }
 
@@ -103,6 +110,7 @@ public class FetchCreds implements Serializable, WithHttpServerUri, Runnable {
         return HttpClient.readAll(in, len, StandardCharsets.UTF_8);
       }
     } catch (Exception ignored) {
+      ignored.printStackTrace();
       return null;
     }
   }
