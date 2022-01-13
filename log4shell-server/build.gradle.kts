@@ -14,7 +14,8 @@ dependencies {
     implementation(platform("io.netty:netty-bom:4.1.72.Final"))
     implementation("io.netty:netty-codec-http")
     implementation(platform("com.fasterxml.jackson:jackson-bom:2.13.1"))
-    implementation("com.fasterxml.jackson.core:jackson-databind:2.13.1")
+    implementation("com.fasterxml.jackson.core:jackson-databind")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
     testImplementation("org.junit.jupiter:junit-jupiter:5.7.2")
 
     implementation(platform("software.amazon.awssdk:bom:2.17.107"))

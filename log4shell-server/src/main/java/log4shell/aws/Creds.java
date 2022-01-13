@@ -99,7 +99,7 @@ public class Creds {
 
   @Override
   public String toString() {
-    StringJoiner joiner = new StringJoiner("    ", "    ", "\n");
+    StringJoiner joiner = new StringJoiner("\n    ", "    ", "\n");
     if (profile != null) joiner.add("AWS_PROFILE=" + profile);
     if (accessKeyId != null) joiner.add("AWS_ACCESS_KEY_ID=" + accessKeyId);
     if (secretAccessKey != null) joiner.add("AWS_SECRET_ACCESS_KEY=" + secretAccessKey);
@@ -125,7 +125,7 @@ public class Creds {
     }
     if (instanceSession != null) {
       sb.append("---- Instance Session ----\n");
-      sb.append(credentialsFile);
+      sb.append(instanceSession);
       sb.append("\n");
     }
     return sb.toString();

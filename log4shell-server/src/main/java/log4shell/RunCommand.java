@@ -34,11 +34,11 @@ public final class RunCommand extends Command {
     return entry;
   }
 
-  private void namingReference(Entry entry) {
-    entry.addAttribute("objectClass", "javaNamingReference");
-    entry.setAttribute("javaClassName", "java.lang.String");
-    entry.setAttribute("javaFactory", className);
-  }
+  // private void namingReference(Entry entry) {
+  //   entry.addAttribute("objectClass", "javaNamingReference");
+  //   entry.setAttribute("javaClassName", "java.lang.String");
+  //   entry.setAttribute("javaFactory", className);
+  // }
 
   private void serializedObject(Entry entry, String codebase) {
     entry.addAttribute("objectClass", "javaSerializedObject");

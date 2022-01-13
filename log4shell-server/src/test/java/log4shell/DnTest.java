@@ -1,6 +1,5 @@
 package log4shell;
 
-import com.unboundid.ldap.sdk.Attribute;
 import com.unboundid.ldap.sdk.DN;
 import com.unboundid.ldap.sdk.LDAPException;
 import com.unboundid.ldap.sdk.RDN;
@@ -27,6 +26,5 @@ public class DnTest {
     DN dn = new DN(RAW_DN);
     RDN rdn = dn.getRDN();
     System.out.printf("attributes name = %s", Arrays.toString(rdn.getAttributeNames()));
-    Attribute[] attributes = rdn.getAttributes();
   }
 }
