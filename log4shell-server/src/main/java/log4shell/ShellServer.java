@@ -24,7 +24,7 @@ public class ShellServer implements Closeable {
       System.out.println("Ready Player One");
 
     } catch (Exception e) {
-      System.err.println("Failed to start");
+      System.err.println("Failed to start: " + e.getMessage());
       log.error("Failed to start", e);
     }
   }
