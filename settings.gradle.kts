@@ -9,4 +9,4 @@
 
 rootProject.name = "log4shell"
 include("log4shell-server")
-include("hello-world")
+include("hello")
