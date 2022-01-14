@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -xe
+set -x
 
 echo Build project
 ./gradlew build
