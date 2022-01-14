@@ -1,23 +1,28 @@
 #!/bin/bash
 
+set -xe
+
 echo Build project
 ./gradlew build
 
-mkdir -p ~/opt
-cd ~/opt
+app_home="$(pwd)"
+install_dir=opt
+
+mkdir -p $install_dir
+cd $install_dir
 
 echo Remove former installation
 rm -fr log4shell-server hello
 
 echo Install log4shell-server
-tar xf ~/src/log4shell/log4shell-server/build/distributions/log4shell-server.tar
+tar xf ../log4shell-server/build/distributions/log4shell-server.tar
 echo Install hello-world
-tar xf ~/src/log4shell/hello/build/distributions/hello.tar
+tar xf ../hello/build/distributions/hello.tar
 
 mkdir -p ~/bin
 cd ~/bin
 
 rm -f log4shell-server hello
-ln -s ../opt/log4shell-server/bin/log4shell-server log4shell-server
-ln -s ../opt/hello/bin/hello hello
+ln -s "$app_home/$install_dir/log4shell-server/bin/log4shell-server" log4shell-server
+ln -s "$app_home/$install_dir/hello/bin/hello" hello
 

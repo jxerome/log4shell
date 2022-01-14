@@ -9,6 +9,7 @@
 build/
 out/
 bin/
+opt/
 /log4shell_*.log
 
 /.attach_pid*
