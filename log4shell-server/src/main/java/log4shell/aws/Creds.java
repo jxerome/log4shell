@@ -99,35 +99,29 @@ public class Creds {
 
   @Override
   public String toString() {
-    StringJoiner joiner = new StringJoiner("\n    ", "    ", "\n");
-    if (profile != null) joiner.add("AWS_PROFILE=" + profile);
-    if (accessKeyId != null) joiner.add("AWS_ACCESS_KEY_ID=" + accessKeyId);
-    if (secretAccessKey != null) joiner.add("AWS_SECRET_ACCESS_KEY=" + secretAccessKey);
-    if (sessionToken != null) joiner.add("AWS_SESSION_TOKEN=" + sessionToken);
-    if (roleArn != null) joiner.add("AWS_ROLE_ARN=" + roleArn);
-    if (region != null) joiner.add("AWS_REGION=" + region);
+    StringJoiner joiner = new StringJoiner(System.lineSeparator());
+    joiner.add("======== AWS Credentials ========");
+    joiner.add("---- Environment ----");
+    if (profile != null) joiner.add("export AWS_PROFILE=" + profile);
+    if (accessKeyId != null) joiner.add("export AWS_ACCESS_KEY_ID=" + accessKeyId);
+    if (secretAccessKey != null) joiner.add("export AWS_SECRET_ACCESS_KEY=" + secretAccessKey);
+    if (sessionToken != null) joiner.add("export AWS_SESSION_TOKEN=" + sessionToken);
+    if (roleArn != null) joiner.add("export AWS_ROLE_ARN=" + roleArn);
+    if (region != null) joiner.add("export AWS_REGION=" + region);
     if (webIdentityTokenFile != null)
-      joiner.add("AWS_WEB_IDENTITY_TOKEN_FILE=" + webIdentityTokenFile);
-
-    StringBuilder sb = new StringBuilder();
-    sb.append("======== AWS Credentials ========\n");
-    sb.append("---- Environment ----\n").append(joiner);
-    sb.append('\n');
+      joiner.add("export AWS_WEB_IDENTITY_TOKEN_FILE=" + webIdentityTokenFile);
     if (configFile != null) {
-      sb.append("---- .aws/config ----\n");
-      sb.append(configFile);
-      sb.append("\n");
+      joiner.add("---- .aws/config ----");
+      joiner.add(configFile);
     }
     if (credentialsFile != null) {
-      sb.append("---- .aws/credentials ----\n");
-      sb.append(credentialsFile);
-      sb.append("\n");
+      joiner.add("---- .aws/credentials ----");
+      joiner.add(credentialsFile);
     }
     if (instanceSession != null) {
-      sb.append("---- Instance Session ----\n");
-      sb.append(instanceSession);
-      sb.append("\n");
+      joiner.add("---- Instance Session ----");
+      joiner.add(instanceSession.toString());
     }
-    return sb.toString();
+    return joiner.toString();
   }
 }

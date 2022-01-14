@@ -24,9 +24,9 @@ public final class CommandParser {
           return new RunCommand(dn, config, className);
         case "log":
           String message = firstAttribute.getValue();
-          return new LogCommand(dn, message);
+          return new LogCommand(dn.getParent(), message);
         default:
-          return new LogCommand(dn, dn.toString());
+          return new LogCommand(dn);
       }
     } catch (LDAPException e) {
       return new LogCommand(new DN(), command);

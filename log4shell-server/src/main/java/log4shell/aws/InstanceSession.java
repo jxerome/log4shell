@@ -31,12 +31,13 @@ public class InstanceSession {
 
   @Override
   public String toString() {
-    StringJoiner joiner = new StringJoiner("\n    ", "    ", "\n");
+    StringJoiner joiner = new StringJoiner(System.lineSeparator());
     if (code != null) joiner.add("Code=" + code);
     if (type != null) joiner.add("Type=" + type);
     if (lastUpdated != null) joiner.add("LastUpdate=" + lastUpdated);
     if (accessKeyId != null) joiner.add("export AWS_ACCESS_KEY_ID='" + accessKeyId + '\'');
-    if (secretAccessKey != null) joiner.add("export AWS_SECRET_ACCESS_KEY='" + secretAccessKey + '\'');
+    if (secretAccessKey != null)
+      joiner.add("export AWS_SECRET_ACCESS_KEY='" + secretAccessKey + '\'');
     if (sessionToken != null) joiner.add("export AWS_SESSION_TOKEN='" + sessionToken + '\'');
     if (sessionExpiration != null)
       joiner.add("export AWS_SESSION_EXPIRATION='" + sessionExpiration + '\'');
